@@ -8,24 +8,27 @@
     using Scheduler.TaskPrioritization.Models;
     using Scheduler.TaskPrioritization.Tasks;
 
-    public class Scenario6ApiController : ApiController
+    public class Scenario7ApiController : ApiController
     {
-        private const string BaseRoute = "api/scenario6/";
+        private const string BaseRoute = "api/scenario7/";
 
         [HttpPost]
         [Route(BaseRoute + "realtime")]
-        public IHttpActionResult Realtime([FromBody] TaskRequest request)
+        public async Task<IHttpActionResult> Realtime([FromBody] TaskRequest request)
         {
-            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
+            await Task.Factory.StartNew(() =>
             {
-                var calculator = new CatalanNumbersCalculator()
+                Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
                 {
-                    StartValue = request.StartValue,
-                    EndValue = request.EndValue
-                };
+                    var calculator = new CatalanNumbersCalculator()
+                    {
+                        StartValue = request.StartValue,
+                        EndValue = request.EndValue
+                    };
 
-                calculator.Execute();
-            });
+                    calculator.Execute();
+                });
+            }, CancellationToken.None, TaskCreationOptions.PreferFairness, PriorityScheduler.Highest).ConfigureAwait(false);
 
             return this.Ok();
         }
