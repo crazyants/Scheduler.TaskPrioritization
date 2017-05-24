@@ -216,3 +216,4 @@ FakesAssemblies/
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
 /Scheduler.TaskPrioritization.sln.DotSettings.user
+/Scheduler.TaskPrioritization/Scheduler.TaskPrioritization.csproj.DotSettings
