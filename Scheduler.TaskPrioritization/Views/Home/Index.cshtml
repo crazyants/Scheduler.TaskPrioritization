@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-horizontal"  style="margin-top: 20px;">
+                <fieldset>
+                    <legend>Setup:</legend>
+
+                    <div class="form-group">
+                        <label for="requestUrl" class="col-sm-4 control-label">Request URL</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="requestUrl" placeholder="http://localhost:4444/api">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <br />
+
+                <fieldset>
+                    <legend>Realtime requests:</legend>
+
+                    <div class="form-group">
+                        <label for="numberOfRealtimeRequests" class="col-sm-4 control-label">Concurrent requests:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="numberOfRealtimeRequests" placeholder="30">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intervalBetweenRealtimeRequests" class="col-sm-4 control-label">Interval (in ms):</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="intervalBetweenRealtimeRequests" placeholder="500">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="realtimeRequestComplexity" class="col-sm-4 control-label">Complexity:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="realtimeRequestComplexity" placeholder="100">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="realtimeRequestIterations" class="col-sm-4 control-label">Iterations:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="realtimeRequestIterations" placeholder="100">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <br />
+
+                <fieldset>
+                    <legend>Batch requests:</legend>
+
+                    <div class="form-group">
+                        <label for="numberOfBatchRequests" class="col-sm-4 control-label">Concurrent requests:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="numberOfBatchRequests" placeholder="15">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intervalBetweenBatchRequests" class="col-sm-4 control-label">Interval (in ms):</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="intervalBetweenBatchRequests" placeholder="500">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="batchRequestComplexity" class="col-sm-4 control-label">Complexity:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="batchRequestComplexity" placeholder="150">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="batchRequestIterations" class="col-sm-4 control-label">Iterations:</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="batchRequestIterations" placeholder="200">
+                        </div>
+                    </div>
+                </fieldset>
+                
+                <br />
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button class="btn btn-success" id="saveChangesBtn" type="button">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $('#saveChangesBtn').click(function () {
+            CookieManager.SetCookieValue('requestUrl');
+
+            CookieManager.SetCookieValue('numberOfRealtimeRequests');
+            CookieManager.SetCookieValue('intervalBetweenRealtimeRequests');
+            CookieManager.SetCookieValue('realtimeRequestComplexity');
+            CookieManager.SetCookieValue('realtimeRequestIterations');
+
+            CookieManager.SetCookieValue('numberOfBatchRequests');
+            CookieManager.SetCookieValue('intervalBetweenBatchRequests');
+            CookieManager.SetCookieValue('batchRequestComplexity');
+            CookieManager.SetCookieValue('batchRequestIterations');
+        });
+
+        $(document).ready(function () {
+            CookieManager.BindCookieValue('requestUrl');
+
+            CookieManager.BindCookieValue('numberOfRealtimeRequests');
+            CookieManager.BindCookieValue('intervalBetweenRealtimeRequests');
+            CookieManager.BindCookieValue('realtimeRequestComplexity');
+            CookieManager.BindCookieValue('realtimeRequestIterations');
+
+            CookieManager.BindCookieValue('numberOfBatchRequests');
+            CookieManager.BindCookieValue('intervalBetweenBatchRequests');
+            CookieManager.BindCookieValue('batchRequestComplexity');
+            CookieManager.BindCookieValue('batchRequestIterations');
+        });
+    </script>
+}
+

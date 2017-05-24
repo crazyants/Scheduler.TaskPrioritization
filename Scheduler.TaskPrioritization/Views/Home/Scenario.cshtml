@@ -1,0 +1,74 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@ViewBag.Title</h2>
+            <span>@Html.Raw(ViewBag.Description)</span>
+        </div>
+
+        <div class="col-md-4 text-right" style="margin-top: 20px;">
+            <div class="btn-group text-left">
+                <button type="button" class="btn btn-primary btn-lg" id="startSimulationBtn">Start simulation</button>
+                <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" id="startRealtimeRequestsSimulationBtn">Only realtime requests</a>
+                    </li>
+
+                    <li>
+                        <a href="#" id="startBatchRequestsSimulationBtn">Only batch requests</a>
+                    </li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary btn-lg btn-danger" id="stopSimulationsBtn" style="display: none;">Stop simulation</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3 style="margin-bottom: 20px;">Real-time requests:</h3>
+
+            <table class="table table-bordered">
+                <thead class="requestResults">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Calculation time (ms)</th>
+                        <th class="text-center">Response time (ms)</th>
+                        <th class="text-center">Complexity</th>
+                        <th class="text-center">Iterations</th>
+                    </tr>
+                </thead>
+
+                <tbody id="realtimeRequestsTable"></tbody>
+            </table>
+            
+            <h3 id="realtimeRequestsAverageExecutionTime"></h3>
+            <h3 id="realtimeRequestsAverageResponseTime"></h3>
+        </div>
+
+        <div class="col-md-6">
+            <h3 style="margin-bottom: 20px;">Batch requests:</h3>
+
+            <table class="table table-bordered">
+                <thead class="requestResults">
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Calculation time (ms)</th>
+                        <th class="text-center">Response time (ms)</th>
+                        <th class="text-center">Complexity</th>
+                        <th class="text-center">Iterations</th>
+                    </tr>
+                </thead>
+
+                <tbody id="batchRequestsTable"></tbody>
+            </table>
+
+            <h3 id="batchRequestsAverageExecutionTime"></h3>
+            <h3 id="batchRequestsAverageResponseTime"></h3>
+        </div>
+    </div>
+</div>

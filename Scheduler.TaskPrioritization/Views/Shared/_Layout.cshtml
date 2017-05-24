@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Task Prioritization", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Setup", "Index", "Home", new { area = "" }, null)</li>
+                    
+                    @{
+                        var scenarioNames = ViewBag.ScenarioNames as List<KeyValuePair<int, string>>;
+
+                        for (int i = 0; i < scenarioNames.Count; i++)
+                        {
+                            <li>@Html.ActionLink(scenarioNames[i].Value, "Scenario", "Home", new { id = scenarioNames[i].Key, area = "" }, null)</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
+    <script type="text/x-template" id="tableRowTemplate">
+        <tr class="requestResult">
+            <th scope="row" class="requestNumber text-center"></th>
+            <td class="requestExecutionTime text-center"></td>
+            <td class="requestResponseTime text-center"></td>
+            <td class="requestComplexity text-center"></td>
+            <td class="requestIterations text-center"></td>
+        </tr>
+    </script>
+    
+    <script type="text/javascript">
+        EventBinder.SetApiControllerName('@ViewBag.ApiControllerName');
+        EventBinder.BindEvents();
+    </script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
