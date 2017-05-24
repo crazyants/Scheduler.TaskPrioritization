@@ -1,9 +1,9 @@
 ﻿namespace Scheduler.TaskPrioritization.ApiControllers
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Http;
-    using Scheduler.TaskPrioritization.Infrastructure;
     using Scheduler.TaskPrioritization.Models;
     using Scheduler.TaskPrioritization.Tasks;
 
@@ -13,42 +13,42 @@
 
         [HttpPost]
         [Route(BaseRoute + "realtime")]
-        public async Task<IHttpActionResult> Realtime([FromBody] TaskRequest request)
+        public IHttpActionResult Realtime([FromBody] TaskRequest request)
         {
-            await Task.Factory.StartNew(() =>
-            {
-                Parallel.For(0, request.NumberOfIterations, i =>
-                {
-                    var calculator = new CatalanNumbersCalculator()
-                    {
-                        StartValue = request.StartValue,
-                        EndValue = request.EndValue
-                    };
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                    calculator.Execute();
-                });
-            }, CancellationToken.None, TaskCreationOptions.PreferFairness, PriorityScheduler.Highest);
+            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                var calculator = new CatalanNumbersCalculator()
+                {
+                    StartValue = request.StartValue,
+                    EndValue = request.EndValue
+                };
+
+                calculator.Execute();
+            });
 
             return this.Ok();
         }
 
         [HttpPost]
         [Route(BaseRoute + "batch")]
-        public async Task<IHttpActionResult> Batch([FromBody] TaskRequest request)
+        public IHttpActionResult Batch([FromBody] TaskRequest request)
         {
-            await Task.Factory.StartNew(() => 
-            {
-                for (int i = 0; i < request.NumberOfIterations; i++)
-                {
-                    var calculator = new CatalanNumbersCalculator()
-                    {
-                        StartValue = request.StartValue,
-                        EndValue = request.EndValue
-                    };
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
-                    calculator.Execute();
-                }
-            }, CancellationToken.None, TaskCreationOptions.LongRunning, PriorityScheduler.Lowest);
+            for (int i = 0; i < request.NumberOfIterations; i++)
+            {
+                var calculator = new CatalanNumbersCalculator()
+                {
+                    StartValue = request.StartValue,
+                    EndValue = request.EndValue
+                };
+
+                calculator.Execute();
+            }
 
             return this.Ok();
         }

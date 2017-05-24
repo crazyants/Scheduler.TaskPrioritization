@@ -136,6 +136,8 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="ApiControllers\Scenario4ApiController.cs" />
+    <Compile Include="ApiControllers\Scenario6ApiController.cs" />
+    <Compile Include="ApiControllers\Scenario5ApiController.cs" />
     <Compile Include="ApiControllers\Scenario3ApiController.cs" />
     <Compile Include="ApiControllers\Scenario2ApiController.cs" />
     <Compile Include="ApiControllers\Scenario1ApiController.cs" />
