@@ -20,6 +20,7 @@
             base.OnActionExecuted(actionExecutedContext);
 
             var stopwatch = (Stopwatch)actionExecutedContext.Request.Properties[StopwatchKey];
+            stopwatch.Stop();
 
             actionExecutedContext.Response.Headers.Add("Execution-Time", stopwatch.ElapsedMilliseconds.ToString());
         }

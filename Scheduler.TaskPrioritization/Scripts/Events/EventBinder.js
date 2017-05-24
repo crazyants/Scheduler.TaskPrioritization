@@ -21,9 +21,13 @@
     function _removeAverageTimeElements() {
         $('#realtimeRequestsAverageResponseTime').html('');
         $('#realtimeRequestsAverageExecutionTime').html('');
+        $('#realtimeRequestsTotalExecutionTime').html('');
+        $('#realtimeRequestsTotalResponseTime').html('');
 
         $('#batchRequestsAverageResponseTime').html('');
         $('#batchRequestsAverageExecutionTime').html('');
+        $('#batchRequestsTotalExecutionTime').html('');
+        $('#batchRequestsTotalResponseTime').html('');
     }
 
     function _displayResult(response, parentElementSelector) {
@@ -41,14 +45,22 @@
 
     function _onRealtimeRequestExecuted(response) {
         _displayResult(response, '#realtimeRequestsTable');
+
         _displayAverageTime('#realtimeRequestsTable', '#realtimeRequestsAverageExecutionTime', ' .requestExecutionTime', 'Average calculation time: ');
         _displayAverageTime('#realtimeRequestsTable', '#realtimeRequestsAverageResponseTime', ' .requestResponseTime', 'Average response time: ');
+
+        _displayTotalTime('#realtimeRequestsTable', '#realtimeRequestsTotalExecutionTime', ' .requestExecutionTime', 'Total calculation time: ');
+        _displayTotalTime('#realtimeRequestsTable', '#realtimeRequestsTotalResponseTime', ' .requestResponseTime', 'Total response time: ');
     }
 
     function _onBatchRequestExecuted(response) {
         _displayResult(response, '#batchRequestsTable');
+
         _displayAverageTime('#batchRequestsTable', '#batchRequestsAverageExecutionTime', ' .requestExecutionTime', 'Average calculation time: ');
         _displayAverageTime('#batchRequestsTable', '#batchRequestsAverageResponseTime', ' .requestResponseTime', 'Average response time: ');
+
+        _displayTotalTime('#batchRequestsTable', '#batchRequestsTotalExecutionTime', ' .requestExecutionTime', 'Total calculation time: ');
+        _displayTotalTime('#batchRequestsTable', '#batchRequestsTotalResponseTime', ' .requestResponseTime', 'Total response time: ');
     }
 
     function _displayAverageTime(parentElementSelector, destinationElementSelector, className, message) {
@@ -61,6 +73,17 @@
 
         var averageResponseTime = parseInt(sum / elements.length, 10);
         $(destinationElementSelector).html(message + averageResponseTime + ' ms');
+    }
+
+    function _displayTotalTime(parentElementSelector, destinationElementSelector, className, message) {
+        var elements = $(parentElementSelector + className);
+
+        var sum = 0;
+        for (var i = 0; i < elements.length; i++) {
+            sum += parseInt(elements[i].innerHTML, 10);
+        }
+
+        $(destinationElementSelector).html(message + sum + ' ms');
     }
 
     function _getApiControllerName() {
