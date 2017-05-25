@@ -23,7 +23,7 @@ namespace Scheduler.TaskPrioritization.ApiControllers
         {
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount - 1) }, i =>
+            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
             {
                 Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
