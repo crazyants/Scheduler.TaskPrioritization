@@ -15,6 +15,7 @@
             ["Scenario #5"] = "<span class='label label-success'>FASTEST</span> <br /> <br /> Similar to Scenario #4. <br/ > The PriorityScheduler is used to set priority over Task instead via the Thread. <br/ > Only the Realtime requests use Parallel.For().",
             ["Scenario #6"] = "<span class='label label-success'>FASTEST</span> <br /> <br /> Similar to Scenario #5. <br/ > The PriorityScheduler is used to set priority over Task instead via the Thread. <br/ > Only the Realtime requests use Parallel.For(). <br /> The MaxDegreeOfParallelism in Parallel.For() is set to number of processors on the current machine.",
             ["Scenario #7"] = "<span class='label label-success'>FASTEST</span> <br /> <br /> Similar to Scenario #6. <br/ > The PriorityScheduler is used to set priority over Task instead via the Thread. <br/ > Only the Realtime requests use Parallel.For() within a new started Task. <br /> The MaxDegreeOfParallelism in Parallel.For() is set to number of processors on the current machine.",
+            ["Scenario #8"] = "<span class='label label-success'>AVERAGE</span> <br /> <br /> Similar to Scenario #2. <br/ > The PriorityScheduler is used to set priority over Task instead via the Thread. <br/ > Only the Realtime requests use Parallel.For() within a new started Task. <br /> The MaxDegreeOfParallelism in Parallel.For() is set to number of processors on the current machine. <br /> Max number of concurrent Batch requests is set to 2."
         };
 
         public ActionResult Index()

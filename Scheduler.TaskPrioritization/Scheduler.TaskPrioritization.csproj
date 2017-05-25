@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="ApiControllers\Scenario8ApiController.cs" />
     <Compile Include="ApiControllers\Scenario4ApiController.cs" />
     <Compile Include="ApiControllers\Scenario6ApiController.cs" />
     <Compile Include="ApiControllers\Scenario7ApiController.cs" />
@@ -168,6 +169,7 @@
     <Content Include="Scripts\Events\EventBinder.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Calculator\TaskSimulator.js" />
