@@ -1,5 +1,6 @@
 # Scheduler.TaskPrioritization
 
+Proof of Concept - simple realization of a task prioritization. Long running batch requests must not affect over the urgent real-time requests that should be executed within specific response time (e.g. 100-200 ms). 
 
 ## Scenario 1
 * Performance: ``SLOW``
