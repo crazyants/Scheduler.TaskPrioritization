@@ -14,6 +14,8 @@
         public static PriorityScheduler BelowNormal = new PriorityScheduler(ThreadPriority.BelowNormal);
         public static PriorityScheduler Lowest = new PriorityScheduler(ThreadPriority.Lowest);
 
+        private static readonly object locker = new object();
+
         private readonly int maximumConcurrencyLevel = Math.Max(1, Environment.ProcessorCount);
         private readonly ThreadPriority priority;
 
@@ -38,23 +40,31 @@
 
             if (this.threads == null)
             {
-                this.threads = new Thread[this.maximumConcurrencyLevel];
-
-                for (var i = 0; i < this.threads.Length; i++)
+                lock (locker)
                 {
-                    var thread = new Thread(() =>
+                    if (this.threads == null)
                     {
-                        foreach (var t in this.tasks.GetConsumingEnumerable())
-                            this.TryExecuteTask(t);
-                    })
-                    {
-                        Name = $"PriorityScheduler: {i}",
-                        Priority = this.priority,
-                        IsBackground = true
-                    };
+                        this.threads = new Thread[this.maximumConcurrencyLevel];
 
-                    this.threads[i] = thread;
-                    thread.Start();
+                        for (var i = 0; i < this.threads.Length; i++)
+                        {
+                            var thread = new Thread(() =>
+                            {
+                                foreach (var t in this.tasks.GetConsumingEnumerable())
+                                {
+                                    this.TryExecuteTask(t);
+                                }
+                            })
+                            {
+                                Name = $"PriorityScheduler: {i}",
+                                Priority = this.priority,
+                                IsBackground = true
+                            };
+
+                            this.threads[i] = thread;
+                            thread.Start();
+                        }
+                    }
                 }
             }
         }

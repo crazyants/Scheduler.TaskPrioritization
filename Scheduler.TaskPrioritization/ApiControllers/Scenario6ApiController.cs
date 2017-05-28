@@ -14,28 +14,35 @@
 
         [HttpPost]
         [Route(BaseRoute + "realtime")]
-        public IHttpActionResult Realtime([FromBody] TaskRequest request)
+        public async Task<IHttpActionResult> Realtime([FromBody] TaskRequest request)
         {
-            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
+            await Task.Factory.StartNew(() =>
             {
-                var calculator = new CatalanNumbersCalculator()
+                Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
                 {
-                    StartValue = request.StartValue,
-                    EndValue = request.EndValue
-                };
+                    var calculator = new CatalanNumbersCalculator()
+                    {
+                        StartValue = request.StartValue,
+                        EndValue = request.EndValue
+                    };
 
-                calculator.Execute();
-            });
+                    calculator.Execute();
+                });
+            }, CancellationToken.None, TaskCreationOptions.PreferFairness, PriorityScheduler.Highest).ConfigureAwait(false);
 
             return this.Ok();
         }
 
         [HttpPost]
         [Route(BaseRoute + "batch")]
-        public async Task<IHttpActionResult> Batch([FromBody] TaskRequest request)
+        public IHttpActionResult Batch([FromBody] TaskRequest request)
         {
-            await Task.Factory.StartNew(() => 
+            Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+            var thread = new Thread(() =>
             {
+                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
                 for (int i = 0; i < request.NumberOfIterations; i++)
                 {
                     var calculator = new CatalanNumbersCalculator()
@@ -46,7 +53,10 @@
 
                     calculator.Execute();
                 }
-            }, CancellationToken.None, TaskCreationOptions.LongRunning, PriorityScheduler.Lowest).ConfigureAwait(false);
+            });
+
+            thread.Start();
+            thread.Join();
 
             return this.Ok();
         }

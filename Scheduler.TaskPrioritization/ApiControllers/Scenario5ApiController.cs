@@ -1,5 +1,6 @@
 ﻿namespace Scheduler.TaskPrioritization.ApiControllers
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -11,23 +12,28 @@
     {
         private const string BaseRoute = "api/scenario5/";
 
+        private const int MAX_NUMBER_OF_CONCURRENT_BATCH_REQUESTS = 3;
+
+        private static int NUMBER_OF_CONCURRENT_BATCH_REQUESTS = 0;
+
         [HttpPost]
         [Route(BaseRoute + "realtime")]
-        public async Task<IHttpActionResult> Realtime([FromBody] TaskRequest request)
+        public IHttpActionResult Realtime([FromBody] TaskRequest request)
         {
-            await Task.Factory.StartNew(() =>
-            {
-                Parallel.For(0, request.NumberOfIterations, i =>
-                {
-                    var calculator = new CatalanNumbersCalculator()
-                    {
-                        StartValue = request.StartValue,
-                        EndValue = request.EndValue
-                    };
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
 
-                    calculator.Execute();
-                });
-            }, CancellationToken.None, TaskCreationOptions.PreferFairness, PriorityScheduler.Highest).ConfigureAwait(false);
+            Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+
+                var calculator = new CatalanNumbersCalculator()
+                {
+                    StartValue = request.StartValue,
+                    EndValue = request.EndValue
+                };
+
+                calculator.Execute();
+            });
 
             return this.Ok();
         }
@@ -36,17 +42,35 @@
         [Route(BaseRoute + "batch")]
         public async Task<IHttpActionResult> Batch([FromBody] TaskRequest request)
         {
-            await Task.Factory.StartNew(() => 
+            await Task.Factory.StartNew(() =>
             {
-                for (int i = 0; i < request.NumberOfIterations; i++)
+                while (true)
                 {
-                    var calculator = new CatalanNumbersCalculator()
+                    if (NUMBER_OF_CONCURRENT_BATCH_REQUESTS < MAX_NUMBER_OF_CONCURRENT_BATCH_REQUESTS)
                     {
-                        StartValue = request.StartValue,
-                        EndValue = request.EndValue
-                    };
+                        Interlocked.Increment(ref NUMBER_OF_CONCURRENT_BATCH_REQUESTS);
 
-                    calculator.Execute();
+                        if (NUMBER_OF_CONCURRENT_BATCH_REQUESTS < MAX_NUMBER_OF_CONCURRENT_BATCH_REQUESTS)
+                        {
+                            for (int i = 0; i < request.NumberOfIterations; i++)
+                            {
+                                var calculator = new CatalanNumbersCalculator()
+                                {
+                                    StartValue = request.StartValue,
+                                    EndValue = request.EndValue
+                                };
+
+                                calculator.Execute();
+                            }
+
+                            Interlocked.Decrement(ref NUMBER_OF_CONCURRENT_BATCH_REQUESTS);
+                            break;
+                        }
+                        else
+                        {
+                            Interlocked.Decrement(ref NUMBER_OF_CONCURRENT_BATCH_REQUESTS);
+                        }
+                    }
                 }
             }, CancellationToken.None, TaskCreationOptions.LongRunning, PriorityScheduler.Lowest).ConfigureAwait(false);
 

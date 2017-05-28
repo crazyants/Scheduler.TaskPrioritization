@@ -1,5 +1,6 @@
 ﻿namespace Scheduler.TaskPrioritization.ApiControllers
 {
+    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using System.Web.Http;
@@ -7,9 +8,9 @@
     using Scheduler.TaskPrioritization.Models;
     using Scheduler.TaskPrioritization.Tasks;
 
-    public class Scenario7ApiController : ApiController
+    public class Scenario9ApiController : ApiController
     {
-        private const string BaseRoute = "api/scenario7/";
+        private const string BaseRoute = "api/scenario9/";
 
         [HttpPost]
         [Route(BaseRoute + "realtime")]
@@ -17,7 +18,7 @@
         {
             await Task.Factory.StartNew(() =>
             {
-                Parallel.For(0, request.NumberOfIterations, i =>
+                Parallel.For(0, request.NumberOfIterations, new ParallelOptions() { MaxDegreeOfParallelism = Math.Max(1, Environment.ProcessorCount) }, i =>
                 {
                     var calculator = new CatalanNumbersCalculator()
                     {
