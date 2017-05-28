@@ -5,7 +5,7 @@
     using System.Web.Mvc;
     using System.Web.Optimization;
     using System.Web.Routing;
-    using Scheduler.TaskPrioritization.Filters;
+    using Scheduler.TaskPrioritization.Infrastructure.Filters;
 
     public class WebApiApplication : HttpApplication
     {

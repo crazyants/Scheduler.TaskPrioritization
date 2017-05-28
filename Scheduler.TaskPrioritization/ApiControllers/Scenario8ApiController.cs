@@ -5,8 +5,9 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using Scheduler.TaskPrioritization.Infrastructure;
+    using Scheduler.TaskPrioritization.Infrastructure.Scheduler;
+    using Scheduler.TaskPrioritization.Infrastructure.Tasks;
     using Scheduler.TaskPrioritization.Models;
-    using Scheduler.TaskPrioritization.Tasks;
 
     public class Scenario8ApiController : ApiController
     {
