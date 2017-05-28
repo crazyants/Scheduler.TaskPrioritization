@@ -2,6 +2,8 @@
 
 Proof of Concept - simple realization of a task prioritization. Long running batch requests must not affect over the urgent real-time requests that should be executed within specific response time (e.g. 100-200 ms). 
 
+All scenarios can be found in __[ApiControllers](https://github.com/flextry/Scheduler.TaskPrioritization/tree/master/Scheduler.TaskPrioritization/ApiControllers)__ directory.
+
 ## Scenario 1
 * Performance: ``SLOW``
 * Processing logic of realtime requests and Batch requests is the same
